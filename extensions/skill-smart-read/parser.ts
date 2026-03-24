@@ -50,8 +50,14 @@ export function parseSkillDocument(path: string, raw: string): ParsedSkillDocume
   const stack: SectionNode[] = [];
   const counters = [0, 0, 0, 0, 0, 0];
 
+  let inFence = false;
   for (let i = 0; i < bodyLines.length; i += 1) {
     const line = bodyLines[i];
+    if (/^```/.test(line.trim())) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
     const match = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
     if (!match) continue;
 
