@@ -7,7 +7,16 @@ description: Use when loading large SKILL.md files or skill-related markdown doc
 
 Use the `skill_read` tool for large or structured skill documents.
 
-Recommended flow:
-1. Call `skill_read` with index mode first
-2. Pick the most relevant section
-3. Load only that section or subtree
+## Recommended Flow
+
+1. Call `skill_read` with `mode="index"` first
+2. Inspect the section tree
+3. Pick the most relevant `sectionId`
+4. Load only that section with `mode="section"`
+5. If a full topic block is needed, use `mode="subtree"`
+
+## Notes
+
+- `auto` returns the full document for small markdown files
+- `auto` returns an index first for larger or more structured files
+- Prefer `skill_read` over plain `read` when the file is a large `SKILL.md`
