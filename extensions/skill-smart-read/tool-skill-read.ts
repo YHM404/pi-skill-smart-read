@@ -21,8 +21,8 @@ export function registerSkillReadTool(pi: ExtensionAPI) {
     name: "skill_read",
     label: "skill_read",
     description:
-      "Read SKILL.md files and skill-related markdown efficiently. For large files, return a section index first, then load only the requested section or subtree.",
-    promptSnippet: "Read large SKILL.md files efficiently by indexing headings first and loading only relevant sections",
+      "Read SKILL.md files and skill-related markdown efficiently. The tool can return the full document, a section index, or a requested section/subtree.",
+    promptSnippet: "Read SKILL.md files and skill-related markdown through a skill-aware reader",
     promptGuidelines: [
       "Use skill_read instead of read when loading skills or skill-related markdown documents.",
       "Use skill_read mode=\"auto\" by default and let the tool choose between full text and indexed section access.",
@@ -73,15 +73,11 @@ export function registerSkillReadTool(pi: ExtensionAPI) {
         text = formatSection(doc, params.sectionId, true);
       }
 
-      const scopeNote = skillContext.isSkillDocument
-        ? `Skill root: ${skillContext.skillRoot}\nSkill file: ${skillContext.skillFile}`
-        : "This markdown file is not inside a detected skill directory.";
-
       return {
         content: [
           {
             type: "text",
-            text: `${text}\n\n${scopeNote}`,
+            text,
           },
         ],
         details: {

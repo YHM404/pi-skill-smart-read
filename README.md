@@ -7,10 +7,10 @@ A pi package for token-efficient skill loading.
 This package adds a `skill_read` tool for `SKILL.md` files and skill-related markdown documents.
 
 Instead of routing skill loading through the default `read` flow, it can:
-- return a heading index first
+- return a heading index when needed
 - load one section body
 - load one section subtree
-- inject guidance telling the model to prefer `skill_read` for large skills
+- inject guidance telling the model to use `skill_read` for skill loading
 
 ## Current v0.1 behavior
 
@@ -40,8 +40,6 @@ On each turn, the extension appends guidance telling the model:
   - prompt injection
   - skill detection
   - markdown section parsing
-- `skills/skill-smart-read/SKILL.md`
-  - teaches the model when to use `skill_read`
 
 ## Example calls
 

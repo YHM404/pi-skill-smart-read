@@ -22,7 +22,6 @@
   ],
   "files": [
     "extensions",
-    "skills",
     "README.md",
     "LICENSE"
   ],
@@ -36,9 +35,6 @@
   "pi": {
     "extensions": [
       "./extensions"
-    ],
-    "skills": [
-      "./skills"
     ]
   }
 }
