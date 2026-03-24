@@ -24,8 +24,8 @@ export function registerSkillReadTool(pi: ExtensionAPI) {
       "Read SKILL.md files and skill-related markdown efficiently. For large files, return a section index first, then load only the requested section or subtree.",
     promptSnippet: "Read large SKILL.md files efficiently by indexing headings first and loading only relevant sections",
     promptGuidelines: [
-      "Prefer skill_read over read for large SKILL.md files or skill-related markdown when structure matters.",
-      "Use skill_read mode=\"index\" first for large skills, then mode=\"section\" or mode=\"subtree\" for the relevant part.",
+      "Use skill_read instead of read when loading skills or skill-related markdown documents.",
+      "Use skill_read mode=\"auto\" by default and let the tool choose between full text and indexed section access.",
     ],
     parameters: Type.Object({
       path: Type.String({ description: "Path to SKILL.md or a markdown document inside a skill directory" }),
