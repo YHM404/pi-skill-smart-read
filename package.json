@@ -1,6 +1,6 @@
 {
   "name": "pi-skill-smart-read",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Skill-aware reading for pi: index large SKILL.md files and load sections on demand.",
   "type": "module",
   "author": "Zot6 <yaohuiming789@gmail.com>",
