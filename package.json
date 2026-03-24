@@ -1,17 +1,44 @@
 {
   "name": "pi-skill-smart-read",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
+  "version": "0.1.1",
   "description": "Skill-aware reading for pi: index large SKILL.md files and load sections on demand.",
-  "keywords": ["pi-package"],
+  "type": "module",
+  "author": "Zot6 <yaohuiming789@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/YHM404/pi-skill-smart-read",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YHM404/pi-skill-smart-read.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YHM404/pi-skill-smart-read/issues"
+  },
+  "keywords": [
+    "pi-package",
+    "pi",
+    "skills",
+    "markdown",
+    "token-efficiency"
+  ],
+  "files": [
+    "extensions",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*",
     "@sinclair/typebox": "*"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "pi": {
-    "extensions": ["./extensions"],
-    "skills": ["./skills"]
+    "extensions": [
+      "./extensions"
+    ],
+    "skills": [
+      "./skills"
+    ]
   }
 }

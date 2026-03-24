@@ -1,0 +1,5 @@
+examples/
+.git/
+.github/
+.DS_Store
+*.log

@@ -57,14 +57,51 @@ On each turn, the extension appends guidance telling the model:
 { "path": "/path/to/SKILL.md", "mode": "subtree", "sectionId": "3" }
 ```
 
-## Install locally in pi
+## Install in pi
+
+### From GitHub
+
+```bash
+pi install git:github.com/YHM404/pi-skill-smart-read
+```
+
+Or with the raw GitHub URL:
+
+```bash
+pi install https://github.com/YHM404/pi-skill-smart-read
+```
+
+### From npm
+
+```bash
+pi install npm:pi-skill-smart-read
+```
+
+### Project-local install
+
+```bash
+pi install -l git:github.com/YHM404/pi-skill-smart-read
+```
+
+### Local development install
 
 ```bash
 pi install /absolute/path/to/pi-skill-smart-read
 ```
 
-Or for project-local use:
+## Publish to npm
+
+This repository is structured to be npm-publishable and is published on npm.
+
+Typical release flow for future updates:
 
 ```bash
-pi install -l /absolute/path/to/pi-skill-smart-read
+npm version patch
+npm publish
+```
+
+If you ever switch to a scoped package, publish with:
+
+```bash
+npm publish --access public
 ```
