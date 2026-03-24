@@ -88,20 +88,3 @@ pi install -l git:github.com/YHM404/pi-skill-smart-read
 ```bash
 pi install /absolute/path/to/pi-skill-smart-read
 ```
-
-## Publish to npm
-
-This repository is structured to be npm-publishable and is published on npm.
-
-Typical release flow for future updates:
-
-```bash
-npm version patch
-npm publish
-```
-
-If you ever switch to a scoped package, publish with:
-
-```bash
-npm publish --access public
-```
