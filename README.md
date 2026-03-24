@@ -16,7 +16,12 @@ Instead of routing skill loading through the default `read` flow, it can:
 
 ### Tool
 
-`skill_read` supports these modes:
+`skill_read` supports a minimal interface:
+- `path`
+- `mode`
+- `sectionId`
+
+Modes:
 - `auto`
 - `index`
 - `section`
@@ -24,7 +29,7 @@ Instead of routing skill loading through the default `read` flow, it can:
 
 `auto` returns:
 - full document for small markdown files
-- section index for larger/structured files
+- section index for larger or more structured files
 
 ### Prompt injection
 
@@ -42,6 +47,10 @@ On each turn, the extension appends guidance telling the model:
   - markdown section parsing
 
 ## Example calls
+
+```json
+{ "path": "/path/to/SKILL.md", "mode": "auto" }
+```
 
 ```json
 { "path": "/path/to/SKILL.md", "mode": "index" }

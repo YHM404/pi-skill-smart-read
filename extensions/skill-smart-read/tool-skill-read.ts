@@ -31,8 +31,6 @@ export function registerSkillReadTool(pi: ExtensionAPI) {
       path: Type.String({ description: "Path to SKILL.md or a markdown document inside a skill directory" }),
       mode: Type.Optional(Type.String({ description: 'One of: auto, index, section, subtree. Default: auto' })),
       sectionId: Type.Optional(Type.String({ description: 'Required for mode="section" and mode="subtree"' })),
-      maxDepth: Type.Optional(Type.Number({ description: 'Maximum heading depth to show in index mode. Default: 4' })),
-      includeFrontmatter: Type.Optional(Type.Boolean({ description: 'Include frontmatter in index mode. Default: true' })),
     }),
     async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
       const mode = (params.mode ?? "auto") as SkillReadMode;
@@ -55,12 +53,12 @@ export function registerSkillReadTool(pi: ExtensionAPI) {
       if (mode === "auto") {
         resolvedMode = shouldReturnFullDocument(raw, headingCount) ? "section" : "index";
         if (resolvedMode === "index") {
-          text = formatIndex(doc, params.maxDepth ?? 4, params.includeFrontmatter ?? true);
+          text = formatIndex(doc, 4, true);
         } else {
           text = formatFullDocument(doc);
         }
       } else if (mode === "index") {
-        text = formatIndex(doc, params.maxDepth ?? 4, params.includeFrontmatter ?? true);
+        text = formatIndex(doc, 4, true);
       } else if (mode === "section") {
         if (!params.sectionId) {
           throw new Error('sectionId is required for mode="section"');
