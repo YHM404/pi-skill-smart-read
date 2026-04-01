@@ -143,6 +143,68 @@ export function findSectionById(nodes: SectionNode[], sectionId: string): Sectio
   return flattenSections(nodes).find((node) => node.id === sectionId);
 }
 
+function normalizeWhitespace(input: string): string {
+  return input.replace(/\s+/g, " ").trim();
+}
+
+function normalizeTitleReference(input: string): string {
+  return normalizeWhitespace(input)
+    .replace(/^#+\s*/, "")
+    .replace(/^[-*+]\s*/, "")
+    .replace(/^skill\s+(?:subtree|section):\s*/i, "")
+    .replace(/^section(?:Id)?\s*[:=]\s*/i, "")
+    .replace(/^id\s*=\s*[0-9]+(?:\.[0-9]+)*\s*\|\s*title\s*=\s*/i, "")
+    .replace(/^title\s*=\s*/i, "")
+    .replace(/^([0-9]+(?:\.[0-9]+)*)(?:\s*[-:|]\s*|\s+)/, "")
+    .replace(/\s*\|\s*lines\s*=\s*\d+-\d+\s*$/i, "")
+    .replace(/\s*\(lines\s+\d+-\d+\)\s*$/i, "")
+    .replace(/^['"`]|['"`]$/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function extractSectionId(reference: string): string | undefined {
+  const normalized = normalizeWhitespace(reference);
+  const patterns = [
+    /^[-*+]\s*id\s*=\s*([0-9]+(?:\.[0-9]+)*)(?:\s|\||$)/i,
+    /^id\s*=\s*([0-9]+(?:\.[0-9]+)*)(?:\s|\||$)/i,
+    /^section(?:Id)?\s*[:=]\s*["'`]?([0-9]+(?:\.[0-9]+)*)["'`]?(?:\s|$)/i,
+    /^skill\s+(?:subtree|section):\s*([0-9]+(?:\.[0-9]+)*)/i,
+    /^[-*+]\s*([0-9]+(?:\.[0-9]+)*)(?:\s|$)/,
+    /^["'`]?([0-9]+(?:\.[0-9]+)*)["'`]?(?:\s|$)/,
+    /\bsection\s+([0-9]+(?:\.[0-9]+)*)\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = normalized.match(pattern);
+    if (match?.[1]) return match[1];
+  }
+
+  return undefined;
+}
+
+export function resolveSectionReference(nodes: SectionNode[], reference: string): SectionNode | undefined {
+  const flat = flattenSections(nodes);
+  const trimmed = reference.trim();
+
+  const exactById = flat.find((node) => node.id === trimmed);
+  if (exactById) return exactById;
+
+  const extractedId = extractSectionId(trimmed);
+  if (extractedId) {
+    const byExtractedId = flat.find((node) => node.id === extractedId);
+    if (byExtractedId) return byExtractedId;
+  }
+
+  const normalizedTitle = normalizeTitleReference(trimmed);
+  if (!normalizedTitle) return undefined;
+
+  const titleMatches = flat.filter((node) => normalizeTitleReference(node.title) === normalizedTitle);
+  if (titleMatches.length === 1) return titleMatches[0];
+
+  return undefined;
+}
+
 export function sliceLines(raw: string, startLine: number, endLine: number): string {
   const lines = raw.split("\n");
   const start = Math.max(0, startLine - 1);

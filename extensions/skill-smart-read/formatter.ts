@@ -1,5 +1,5 @@
 import { basename } from "node:path";
-import { findSectionById, flattenSections, sliceLines } from "./parser.ts";
+import { flattenSections, resolveSectionReference, sliceLines } from "./parser.ts";
 import type { ParsedSkillDocument, SectionNode } from "./types.ts";
 
 function formatSectionTree(nodes: SectionNode[], maxDepth = 6, indent = 0): string[] {
@@ -7,7 +7,7 @@ function formatSectionTree(nodes: SectionNode[], maxDepth = 6, indent = 0): stri
   for (const node of nodes) {
     if (node.level > maxDepth) continue;
     const prefix = "  ".repeat(indent);
-    lines.push(`${prefix}- ${node.id} ${node.title} (lines ${node.line}-${node.subtreeEndLine})`);
+    lines.push(`${prefix}- id=${node.id} | title=${node.title} | lines=${node.line}-${node.subtreeEndLine}`);
     lines.push(...formatSectionTree(node.children, maxDepth, indent + 1));
   }
   return lines;
@@ -43,8 +43,9 @@ export function formatIndex(doc: ParsedSkillDocument, maxDepth = 4, includeFront
   lines.push(...formatSectionTree(doc.sections, maxDepth));
   lines.push("");
   lines.push("Tips");
-  lines.push('- Use mode="section" with sectionId="..." to load one section body');
-  lines.push('- Use mode="subtree" with sectionId="..." to load a section plus child sections');
+  lines.push('- Prefer passing only the numeric section id, for example: {"mode":"section","sectionId":"1.2"}');
+  lines.push('- mode="section" loads one section body; mode="subtree" loads a section plus child sections');
+  lines.push('- If you accidentally copy a whole index line or heading title into sectionId, skill_read will try to recover automatically');
   return lines.join("\n");
 }
 
@@ -58,10 +59,12 @@ export function formatFullDocument(doc: ParsedSkillDocument): string {
 }
 
 export function formatSection(doc: ParsedSkillDocument, sectionId: string, subtree: boolean): string {
-  const section = findSectionById(doc.sections, sectionId);
+  const section = resolveSectionReference(doc.sections, sectionId);
   if (!section) {
-    const known = flattenSections(doc.sections).map((node) => node.id).join(", ");
-    throw new Error(`Unknown sectionId \"${sectionId}\". Available section ids: ${known || "(none)"}`);
+    const known = flattenSections(doc.sections).map((node) => `${node.id} (${node.title})`).join(", ");
+    throw new Error(
+      `Unknown sectionId \"${sectionId}\". Pass the numeric id like \"1\" or \"2.3\". Available sections: ${known || "(none)"}`,
+    );
   }
 
   const startLine = subtree ? section.line : section.bodyStartLine;

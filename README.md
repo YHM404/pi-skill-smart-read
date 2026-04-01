@@ -21,6 +21,9 @@ Instead of routing skill loading through the default `read` flow, it can:
 - `mode`
 - `sectionId`
 
+`sectionId` should ideally be the numeric section id like `"2"` or `"2.1"`.
+The tool now also tolerates copied index lines or plain heading titles and will try to recover the real id automatically.
+
 Modes:
 - `auto`
 - `index`
@@ -31,12 +34,15 @@ Modes:
 - full document for small markdown files
 - section index for larger or more structured files
 
+Index entries are formatted explicitly as `id=... | title=... | lines=...` to reduce model confusion when selecting sections.
+
 ### Prompt injection
 
 On each turn, the extension appends guidance telling the model:
 - use `skill_read` instead of `read` when loading skills
 - default to `mode="auto"`
 - call `section` or `subtree` directly when the target section is already known
+- pass only the numeric section id in `sectionId` whenever possible
 
 ## Package layout
 
